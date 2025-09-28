@@ -26,7 +26,7 @@ function probability_waiting() {
         $traffic_intensity,
         $number_of_agents
     )
-    $x = ([math]::pow($traffic_intesity, $number_of_agents) / (integer_factorial([math]::round($number_of_agents, 0)))) * $number_of_agents / ($number_of_agents - $traffic_intensity)
+    $x = ([math]::pow($traffic_intensity, $number_of_agents) / (integer_factorial([math]::round($number_of_agents, 0)))) * $number_of_agents / ($number_of_agents - $traffic_intensity)
     $y = 1
 
     for ($i = 0; $i -lt [math]::round($number_of_agents, 0); $i++) {
