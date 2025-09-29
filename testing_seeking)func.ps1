@@ -37,4 +37,4 @@ function seek_sla() {
 }
 
 
-seek_sla -number_of_calls 25 -average_Handle_time 15 -target_handle_time 15 -agent_starting_point 10 -target_sla 0.9 -variance 0.05
+seek_sla -number_of_calls 100 -average_Handle_time 15 -target_handle_time 15 -agent_starting_point 10 -target_sla 0.9 -variance 0.05
