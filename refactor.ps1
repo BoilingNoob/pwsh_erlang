@@ -64,10 +64,23 @@ function calculate_wait_probability() {
     return $pw 
 }
 
-$volume = calc_intensity -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time
+$reults = New-Object System.Collections.ArrayList
 
-[double]$pw = calculate_wait_probability -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time -agents $agents -volume $volume
+for ($i = 10; $i -le 60; $i++) {
+    $agents = $i
+    $volume = calc_intensity -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time
 
-[double]$service_level = 1 - ($pw * ([math]::Pow([math]::E, (-1 * (($agents - $volume) * ($target_handle_time / $average_Handle_time))))))
+    [double]$pw = calculate_wait_probability -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time -agents $agents -volume $volume
 
-$service_level
+    [double]$service_level = 1 - ($pw * ([math]::Pow([math]::E, (-1 * (($agents - $volume) * ($target_handle_time / $average_Handle_time))))))
+
+    $temp = [pscustomobject]@{
+        agents        = $agents
+        volume        = $volume
+        pw            = $pw
+        service_level = $service_level
+    }
+    $null = $reults.add($temp)
+}
+
+$reults | ft -AutoSize
