@@ -1,3 +1,4 @@
+Clear-Host
 Import-Module .\erlang_C.psm1 -Force
 
 $splat = @{
