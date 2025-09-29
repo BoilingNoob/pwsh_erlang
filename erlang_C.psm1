@@ -6,7 +6,7 @@ function integer_factorial() {
     if ($n -eq 0) {
         return 1
     }
-    $fact = 1
+    [double]$fact = 1
     1..$n | ForEach-Object {
         $fact *= $_
     }
@@ -26,13 +26,19 @@ function probability_waiting() {
         $traffic_intensity,
         $number_of_agents
     )
-    $x = ([math]::pow($traffic_intensity, $number_of_agents) / (integer_factorial([math]::round($number_of_agents, 0)))) * $number_of_agents / ($number_of_agents - $traffic_intensity)
+    $basic_pow = [math]::pow($traffic_intensity, $number_of_agents)
+    $odd_facotrial = (integer_factorial([math]::round($number_of_agents, 0)))
+    $agent_traffic_diff = ($number_of_agents - $traffic_intensity)
+
+    $x = ($basic_pow / $odd_facotrial) * $number_of_agents / ($agent_traffic_diff)
     $y = 1
 
-    for ($i = 0; $i -lt [math]::round($number_of_agents, 0); $i++) {
+    for ($i = 1; $i -le [math]::round($number_of_agents, 0); $i++) {
         $y += [math]::pow($traffic_intensity, $i) / (integer_factorial($i))
     }
-    return $x / ($y + $x)
+    $result = $x / ($y + $x)
+
+    return $result
 }
 
 function service_level() {
