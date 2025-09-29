@@ -64,23 +64,34 @@ function calculate_wait_probability() {
     return $pw 
 }
 
-$reults = New-Object System.Collections.ArrayList
+function test_gambit_of_agents() {
+    param(
+        $min_agents = 10,
+        $max_agents = 100,
+        $number_of_calls = 25,
+        $average_Handle_time = 15,
+        $target_handle_time = 15
+    )
+    $results = New-Object System.Collections.ArrayList
 
-for ($i = 10; $i -le 60; $i++) {
-    $agents = $i
-    $volume = calc_intensity -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time
+    for ($i = $min_agents; $i -le $max_agents; $i++) {
+        $agents = $i
+        $volume = calc_intensity -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time
 
-    [double]$pw = calculate_wait_probability -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time -agents $agents -volume $volume
+        [double]$pw = calculate_wait_probability -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time -agents $agents -volume $volume
 
-    [double]$service_level = 1 - ($pw * ([math]::Pow([math]::E, (-1 * (($agents - $volume) * ($target_handle_time / $average_Handle_time))))))
+        [double]$service_level = 1 - ($pw * ([math]::Pow([math]::E, (-1 * (($agents - $volume) * ($target_handle_time / $average_Handle_time))))))
 
-    $temp = [pscustomobject]@{
-        agents        = $agents
-        volume        = $volume
-        pw            = $pw
-        service_level = $service_level
+        $temp = [pscustomobject]@{
+            agents        = $agents
+            volume        = $volume
+            pw            = $pw
+            service_level = $service_level
+        }
+        $null = $results.add($temp)
     }
-    $null = $reults.add($temp)
+    return $results  
 }
 
-$reults | ft -AutoSize
+
+test_gambit_of_agents -min_agents 5 -max_agents 100
