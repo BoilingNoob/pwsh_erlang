@@ -94,4 +94,4 @@ function test_gambit_of_agents() {
 }
 
 
-test_gambit_of_agents -min_agents 5 -max_agents 100 -number_of_calls 100 -average_Handle_time 15 -target_handle_time 15
+test_gambit_of_agents -min_agents 10 -max_agents 60 -number_of_calls 100 -average_Handle_time 15 -target_handle_time 15
