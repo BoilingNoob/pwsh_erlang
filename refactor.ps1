@@ -86,11 +86,11 @@ function walk_to_min_agents_for_sla() {
     $calc_service_level = 0
     while ($calc_service_level -lt $min_service_level -or $calc_service_level -eq "NaN") {
         $agent_count++
-        write-host "agents: $agent_count"
+        #write-host "agents: $agent_count"
         $temp = calulate_service_level -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time -target_answer_time $target_answer_time -agents $agent_count
-        write-host "temp: $temp"
+        #write-host "temp: $temp"
         $calc_service_level = $temp.service_level
-        write-host "agents: $agent_count, service level: $calc_service_level"
+        #write-host "agents: $agent_count, service level: $calc_service_level"
     }
 
     return $agent_count
