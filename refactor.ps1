@@ -173,7 +173,7 @@ function make_call_segment() {
 $call_segments = Get-Content -Path .\call_reqs.json -Encoding utf8 -Raw | ConvertFrom-Json
 $call_segments = calculate_list_of_agent_reqs -list_of_call_segments $call_segments
 
-$calculated_calls = calc_calls_with_same_params -call_list @(25, 50, 80, 90, 60, 75, 20, 15, 10, 5, 5, 5, 5) -section_duration 0.25 -average_handle_time 15 -target_answer_time 0.3 -sla 0.90
+$calculated_calls = calc_calls_with_same_params -call_list @(25, 50, 80, 90, 60, 75, 20, 15, 10, 5, 5, 5, 5, 100) -section_duration 0.25 -average_handle_time 15 -target_answer_time 0.3 -sla 0.90
 
 
 $calculated_calls | Format-Table -AutoSize
