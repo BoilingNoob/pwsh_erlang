@@ -1,5 +1,3 @@
-
-
 function fac_big() {
     param(
         [double]$my_input = 1
@@ -76,7 +74,6 @@ function calulate_service_level() {
     }
     return $temp
 }
-
 function walk_to_min_agents_for_sla() {
     param(
         $number_of_calls = 25,
@@ -98,7 +95,6 @@ function walk_to_min_agents_for_sla() {
 
     return $agent_count
 }
-
 function test_gambit_of_agents() {
     param(
         $min_agents = 10,
@@ -127,7 +123,6 @@ function test_gambit_of_agents() {
     }
     return $results  
 }
-
 
 #test_gambit_of_agents -min_agents 10 -max_agents 60 -number_of_calls 100 -average_Handle_time 15 -target_handle_time 15
 
