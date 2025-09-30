@@ -111,7 +111,7 @@ function test_gambit_of_agents() {
         $max_agents = 100,
         $number_of_calls = 25,
         $average_Handle_time = 15,
-        $target_handle_time = 15
+        $target_answer_time = 15
     )
     $results = New-Object System.Collections.ArrayList
 
@@ -121,7 +121,7 @@ function test_gambit_of_agents() {
 
         [double]$pw = calculate_wait_probability -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time -agents $agents -volume $volume
 
-        [double]$service_level = 1 - ($pw * ([math]::Pow([math]::E, (-1 * (($agents - $volume) * ($target_handle_time / $average_Handle_time))))))
+        [double]$service_level = 1 - ($pw * ([math]::Pow([math]::E, (-1 * (($agents - $volume) * ($target_answer_time / $average_Handle_time))))))
 
         $temp = [pscustomobject]@{
             agents        = $agents
