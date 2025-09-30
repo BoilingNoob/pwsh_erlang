@@ -123,7 +123,59 @@ function test_gambit_of_agents() {
     }
     return $results  
 }
+function calculate_list_of_agent_reqs() {
+    param(
+        $list_of_call_segments
+    )
 
-#test_gambit_of_agents -min_agents 10 -max_agents 60 -number_of_calls 100 -average_Handle_time 15 -target_handle_time 15
+    for ($i = 0; $i -lt $list_of_call_segments.count; $i++) {
+        $list_of_call_segments[$i].required_agents = walk_to_min_agents_for_sla -number_of_calls $list_of_call_segments[$i].call_count -average_Handle_time $list_of_call_segments[$i].average_handle_time -target_answer_time $list_of_call_segments[$i].target_answer_time -min_service_level $list_of_call_segments[$i].sla -agent_starting_point 1
+    }  
+    return $list_of_call_segments
+}
+function calc_calls_with_same_params() {
+    param(
+        $call_list,
+        $section_duration = 0.25,
+        $average_handle_time = 15,
+        $target_answer_time = 0.3,
+        $sla = 0.9
+    )
 
-walk_to_min_agents_for_sla -number_of_calls 45 -average_Handle_time 15 -target_answer_time 0.3 -min_service_level 0.90 -agent_starting_point 1
+    $calced_list = calculate_list_of_agent_reqs -list_of_call_segments ($call_list | ForEach-Object {
+            return make_call_segment -call_count $_ -segment_duration $section_duration -average_handle_time $average_handle_time -target_answer_time $target_answer_time -sla $sla
+        })
+
+    return $calced_list
+}
+function make_call_segment() {
+    param(
+        $note = $null,
+        $call_count = 60,
+        $segment_duration = 0.25,
+        $average_handle_time = 15,
+        $target_answer_time = 0.3,
+        $sla = 0.9,
+        $required_agents = $null
+    )
+    $temp = [pscustomobject]@{
+        Note                = $note
+        call_count          = $call_count
+        segment_duration    = $segment_duration
+        average_handle_time = $average_handle_time
+        target_answer_time  = $target_answer_time
+        sla                 = $sla
+        required_agents     = $required_agents
+    }
+    return $temp
+}
+
+$call_segments = Get-Content -Path .\call_reqs.json -Encoding utf8 -Raw | ConvertFrom-Json
+$call_segments = calculate_list_of_agent_reqs -list_of_call_segments $call_segments
+
+$calculated_calls = calc_calls_with_same_params -call_list @(25, 50, 80, 90, 60, 75, 20, 15, 10, 5, 5, 5, 5) -section_duration 0.25 -average_handle_time 15 -target_answer_time 0.3 -sla 0.90
+
+
+$calculated_calls | Format-Table -AutoSize
+
+#walk_to_min_agents_for_sla -number_of_calls 45 -average_Handle_time 15 -target_answer_time 0.3 -min_service_level 0.90 -agent_starting_point 1
