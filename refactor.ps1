@@ -1,10 +1,4 @@
 
-$number_of_calls = 25 #count
-$average_Handle_time = 60 #minutes
-$target_handle_time = 15
-$agents = 10
-
-#$agents = 35 #n
 
 function fac_big() {
     param(
