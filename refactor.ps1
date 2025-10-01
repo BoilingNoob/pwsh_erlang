@@ -37,9 +37,9 @@ function calculate_wait_probability() {
         $number_of_calls = 25, #count
         $average_Handle_time = 15, #minutes
         $volume = ($number_of_calls * $average_Handle_time) / 60, #erlangs or call hours/hour
-        $agents = $volume + 1      
+        $agents = $volume + 1
     )
-    
+
     [double]$upper = (([math]::pow($volume, $agents)) / (fac_big -my_input $agents))
     [double]$lower = ($agents / ($agents - $volume))
     [double]$x = ($upper) * ($lower)
@@ -52,8 +52,8 @@ function calculate_wait_probability() {
         $y += $new_y
     }
 
-    [double]$pw = $x / ($x + $y)  
-    return $pw 
+    [double]$pw = $x / ($x + $y)
+    return $pw
 }
 function calulate_service_level() {
     param(
@@ -84,7 +84,7 @@ function walk_to_min_agents_for_sla() {
     )
     $agent_count = $agent_starting_point - 1
     $calc_service_level = 0
-    while ($calc_service_level -lt $min_service_level -or $calc_service_level -eq "NaN") {
+    while ($calc_service_level -lt $min_service_level -or $calc_service_level -eq 'NaN') {
         $agent_count++
         #write-host "agents: $agent_count"
         $temp = calulate_service_level -number_of_calls $number_of_calls -average_Handle_time $average_Handle_time -target_answer_time $target_answer_time -agents $agent_count
@@ -121,7 +121,7 @@ function test_gambit_of_agents() {
         }
         $null = $results.add($temp)
     }
-    return $results  
+    return $results
 }
 function calculate_list_of_agent_reqs() {
     param(
@@ -130,7 +130,7 @@ function calculate_list_of_agent_reqs() {
 
     for ($i = 0; $i -lt $list_of_call_segments.count; $i++) {
         $list_of_call_segments[$i].required_agents = walk_to_min_agents_for_sla -number_of_calls $list_of_call_segments[$i].call_count -average_Handle_time $list_of_call_segments[$i].average_handle_time -target_answer_time $list_of_call_segments[$i].target_answer_time -min_service_level $list_of_call_segments[$i].sla -agent_starting_point 1
-    }  
+    }
     return $list_of_call_segments
 }
 function calc_calls_with_same_params() {
