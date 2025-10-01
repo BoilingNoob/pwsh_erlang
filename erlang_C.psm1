@@ -84,7 +84,7 @@ function get_erlang_c() {
 
     $maximum_occupancy = ($traffic_intensity / $n) * 100
 
-    $n_shrinkage = $n / (1 - $shrinkage)
+    $n_shrinkage = [math]::round($n * (1 + (1 - $shrinkage / 100)), 0)
 
     return [pscustomobject]@{
         'Volume'                              = [int]$volume
