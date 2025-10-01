@@ -87,17 +87,13 @@ function get_erlang_c() {
     $n_shrinkage = $n / (1 - $shrinkage)
 
     return [pscustomobject]@{
-        'Volume' = int($volume),
-        'Traffic Intensity'= int($traffic_intesity),
-        'No. of Required Agents'= int($n),
-        'No. of Required Agents w/ Shrinkage'= [math]::Ceiling($n_shrinkage),
-        'Average Speed of Answer'= [math]::round($average_speed_of_answer, 1),
-        '% of Calls Answered Immediately'= [math]::round($percent_calls_answered_immediately, 2),
-        'Maximum Occupancy'= [math]::round($maximum_occupancy, 2),
-        'SLA'= [math]::round(($act_sla * 100), 2) #
-    }  
+        'Volume'                              = [int]$volume
+        'Traffic Intensity'                   = [int]$traffic_intensity
+        'No. of Required Agents'              = [int]$n
+        'No. of Required Agents w/ Shrinkage' = [math]::Ceiling($n_shrinkage)
+        'Average Speed of Answer'             = [math]::round($average_speed_of_answer, 1)
+        '% of Calls Answered Immediately'     = [math]::round($percent_calls_answered_immediately, 2)
+        'Maximum Occupancy'                   = [math]::round($maximum_occupancy, 2)
+        'SLA'                                 = [math]::round(($act_sla * 100), 2)
+    }
 }
-
-
-
-
