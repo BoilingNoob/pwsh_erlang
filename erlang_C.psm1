@@ -66,23 +66,23 @@ function get_erlang_c() {
     $raw_agent = 1
     $n = [math]::round($traffic_intensity + $raw_agent, 0)
 
-    $pw = probability_waiting($traffic_intensity, $n)
+    $pw = probability_waiting $traffic_intensity $n
 
-    $act_sla = service_level($pw, $traffic_intensity, $n, $target_answer_time, $average_handle_time_seconds)
+    $act_sla = service_level $pw $traffic_intensity $n $target_answer_time $average_handle_time_seconds
 
     while ($act_sla -lt $target_sla) {
         $raw_agent += 1
         $n = [math]::round($traffic_intensity + $raw_agent)
-        $pw = probability_waiting($traffic_intensity, $n)
-        $act_sla = service_level($pw, $traffic_intesity, $n, $target_answer_time, $average_handle_time_seconds)
+        $pw = probability_waiting $traffic_intensity $n
+        $act_sla = service_level $pw $traffic_intensity $n $target_answer_time $average_handle_time_seconds
     }
-        
 
-    $average_speed_of_answer = ($pw * $average_handle_time_seconds) / ($n - $traffic_intesity)
+
+    $average_speed_of_answer = ($pw * $average_handle_time_seconds) / ($n - $traffic_intensity)
 
     $percent_calls_answered_immediately = (1 - $pw) * 100
 
-    $maximum_occupancy = ($traffic_intesity / $n) * 100
+    $maximum_occupancy = ($traffic_intensity / $n) * 100
 
     $n_shrinkage = $n / (1 - $shrinkage)
 
