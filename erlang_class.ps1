@@ -131,15 +131,5 @@ class ErlangC {
 }
 
 
-
-$hold = [ErlangC]::new(8, 30, 15, (180 / 60), 0.9, 0.3)
-#$hold = [ErlangC]::new(8, 30, 15, (120 / 60), 0.7, 0.3)
-#$hold = [ErlangC]::new(100, 30, 3, (20 / 60), 0.8, 0.3)
+$hold = [ErlangC]::new(100, 30, 3, (20 / 60), 0.8, 0.3)
 $hold.basic_export()
-#$hold.calculate_wait_probability(6)
-
-
-#$agents = 11
-#($hold.take_power($hold.calc_intensity(), $agents) / $hold.fac_big($agents)) * ($agents / ($agents - $hold.calc_intensity()))
-
-#$hold.calculate_wait_probability($agents)
