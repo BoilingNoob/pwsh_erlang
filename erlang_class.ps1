@@ -14,6 +14,14 @@ class ErlangC {
         $this.sla = $sla
         $this.shrinkage = $shrinkage
     }
+    ErlangC([hashtable]$properties) {
+        $this.call_count = $properties.call_count
+        $this.segment_duration = $properties.segment_duration
+        $this.average_handle_time = $properties.average_handle_time
+        $this.target_answer_time = $properties.target_answer_time
+        $this.sla = $properties.sla
+        $this.shrinkage = $properties.shrinkage
+    }
 
     [bigint]fac_big([int]$my_input = 1) {
         [int]$n = $my_input -as [int]
@@ -132,7 +140,17 @@ class ErlangC {
     }
 }
 
+$properties = @{
+    call_count          = 100
+    segment_duration    = 30
+    average_handle_time = 3
+    target_answer_time  = 20 / 60
+    sla                 = 0.8
+    shrinkage           = 0.3 
+}
 
-$hold = [ErlangC]::new(100, 30, 3, (20 / 60), 0.8, 0.3)
+
+#$hold = [ErlangC]::new(100, 30, 3, (20 / 60), 0.8, 0.3)
+$hold = [ErlangC]::new($properties)
 
 $hold.basic_export()
