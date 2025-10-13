@@ -18,7 +18,6 @@ class ErlangC {
     [bigint]fac_big([int]$my_input = 1) {
         [int]$n = $my_input -as [int]
         if ($my_input -le 1) {
-            #return 1 -as [bigint]
             return [bigint]::new(1)
         }
         else {
@@ -49,8 +48,8 @@ class ErlangC {
     [double]calculate_wait_probability([int]$agents) {
 
         [double]$intensity = $this.calc_intensity()
-        [double]$left = ([math]::pow($this.calc_intensity(), $agents) / $this.fac_big($agents)) -as [double]
-        [double]$right = ($agents / ($agents - $this.calc_intensity()))
+        [double]$left = ([math]::pow($intensity, $agents) / $this.fac_big($agents)) -as [double]
+        [double]$right = ($agents / ($agents - $intensity))
         [double]$x = $left * $right
         [double]$y = 0
 
@@ -118,15 +117,16 @@ class ErlangC {
         return $this.calc_average_speed_of_answer($this.walk_to_min_agents())
     }
     [pscustomobject]basic_export() {
+        $min_agents = $this.walk_to_min_agents()
         $export = $this
         $export | Add-Member -MemberType NoteProperty -Name "intensity" -Value ($this.calc_intensity()) -Force
-        $export | Add-Member -MemberType NoteProperty -Name "agents_real" -Value ($this.walk_to_min_agents()) -Force
-        $export | Add-Member -MemberType NoteProperty -Name "agents_scheduled" -Value ($this.calc_shrinkage($this.walk_to_min_agents(), $this.shrinkage)) -Force
-        $export | Add-Member -MemberType NoteProperty -Name "pw" -Value ($this.calculate_wait_probability($this.walk_to_min_agents())) -Force
-        $export | Add-Member -MemberType NoteProperty -Name "service_level" -Value ($this.calulate_service_level($this.walk_to_min_agents())) -Force
-        $export | Add-Member -MemberType NoteProperty -Name "occupancy" -Value ($this.occupancy($this.walk_to_min_agents())) -Force
-        $export | Add-Member -MemberType NoteProperty -Name "percent_immediately_answered" -Value ($this.calc_immediate_answer($this.walk_to_min_agents())) -Force
-        $export | Add-Member -MemberType NoteProperty -Name "average_speed_of_answer" -Value ($this.calc_average_speed_of_answer($this.walk_to_min_agents())) -Force
+        $export | Add-Member -MemberType NoteProperty -Name "agents_real" -Value ($min_agents) -Force
+        $export | Add-Member -MemberType NoteProperty -Name "agents_scheduled" -Value ($this.calc_shrinkage($min_agents, $this.shrinkage)) -Force
+        $export | Add-Member -MemberType NoteProperty -Name "pw" -Value ($this.calculate_wait_probability($min_agents)) -Force
+        $export | Add-Member -MemberType NoteProperty -Name "service_level" -Value ($this.calulate_service_level($min_agents)) -Force
+        $export | Add-Member -MemberType NoteProperty -Name "occupancy" -Value ($this.occupancy($min_agents)) -Force
+        $export | Add-Member -MemberType NoteProperty -Name "percent_immediately_answered" -Value ($this.calc_immediate_answer($min_agents)) -Force
+        $export | Add-Member -MemberType NoteProperty -Name "average_speed_of_answer" -Value ($this.calc_average_speed_of_answer($min_agents)) -Force
         
         return $export
     }
@@ -134,4 +134,5 @@ class ErlangC {
 
 
 $hold = [ErlangC]::new(100, 30, 3, (20 / 60), 0.8, 0.3)
+
 $hold.basic_export()
