@@ -49,16 +49,18 @@ class ErlangC {
     [double]calculate_wait_probability([int]$agents) {
 
         [double]$intensity = $this.calc_intensity()
-        [double]$x = ($this.take_power($this.calc_intensity(), $agents) / $this.fac_big($agents)) * ($agents / ($agents - $this.calc_intensity()))
+        [double]$left = ([math]::pow($this.calc_intensity(), $agents) / $this.fac_big($agents)) -as [double]
+        [double]$right = ($agents / ($agents - $this.calc_intensity()))
+        [double]$x = $left * $right
         [double]$y = 0
 
         for ($i = 0; $i -lt $agents; $i++) {
-            [double]$new_y = ($this.take_power($intensity, $i) / ($this.fac_big($i))) -as [double]
+            [double]$new_y = (([math]::pow($intensity, $i) -as [double]) / ($this.fac_big($i))) -as [double]
             $y += $new_y
         }
 
         [double]$pw = $x / ($x + $y)  
-        #Write-Host "pw: $pw x: $x , y: $y, agents: $agents"
+        #Write-Host "pw: $pw x: $x , y: $y, agents: $agents, intensity $intensity"
         return $pw
     }
     [double]calculate_wait_probability() {
@@ -69,7 +71,7 @@ class ErlangC {
         [double]$time_metric = (($this.target_answer_time) / $this.average_Handle_time)
         [double]$per_agent = ($agents - $this.calc_intensity())
 
-        [double]$answer = 1 - ($pw * ($this.take_power([math]::E, (-1 * ($per_agent * $time_metric)))))
+        [double]$answer = 1.0 - ($pw * ([math]::pow([math]::E, (-1.0 * ($per_agent * $time_metric)))))
 
         return $answer
     }
